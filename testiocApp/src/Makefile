@@ -16,10 +16,15 @@ DBD += testioc.dbd
 testioc_DBD += base.dbd
 
 # Include dbd files from all support applications:
-#testioc_DBD += xxx.dbd
+testioc_DBD += asynRecord.dbd
+testioc_DBD += sscanSupport.dbd
+testioc_DBD += calcSupport.dbd
+testioc_DBD += system.dbd
 
 # Add all the support libraries needed by this IOC
-#testioc_LIBS += xxx
+testioc_LIBS += asyn
+testioc_LIBS += sscan
+testioc_LIBS += calc
 
 # testioc_registerRecordDeviceDriver.cpp derives from testioc.dbd
 testioc_SRCS += testioc_registerRecordDeviceDriver.cpp
