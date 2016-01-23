@@ -13,3 +13,5 @@ li
 perl
 bin
 lib
+O.*
+envPaths
