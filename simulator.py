@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 #
 # test simulator for testing pyepics.
-# 
-# this script changes values definied in the pydebug.db, which all 
+#
+# this script changes values definied in the pydebug.db, which all
 # the tests scripts use.  This script must be running (somewhere)
-# for many of the tests (callbacks, etc) to work. 
+# for many of the tests (callbacks, etc) to work.
 
-# 
+from __future__ import (print_function, division)
 import epics
 import time
 import random
@@ -23,10 +23,10 @@ def onConnect(pvname=None, conn=None, **kws):
     global NEEDS_INIT
     NEEDS_INIT = conn
 
-        
+
 def make_pvs(*args, **kwds):
-    # print "Make PVS '  ", prefix,  args
-    # print  [("%s%s" % (prefix, name)) for name in args]
+    # print("Make PVS '  ", prefix,  args)
+    # print( [("%s%s" % (prefix, name)) for name in args])
     pvlist = [epics.PV("%s%s" % (prefix, name)) for name in args]
     for pv in pvlist:
         pv.connect()
@@ -51,42 +51,42 @@ subarray_driver = make_pvs("wave_test",)[0]
 
 def initialize_data():
     subarray_driver.put(numpy.arange(64)/12.0)
-    
+
     for p in mbbos:
         p.put(1)
-        
+
     for i, p in enumerate(longs):    p.put((i+1))
 
-    for i, p in enumerate(strs):     p.put("String %s" % (i+1))
+    for i, p in enumerate(strs):     p.put(("String %s" % (i+1)).encode('ascii'))
 
     for i, p in enumerate(binaries):   p.put((i+1))
 
     for i, p in enumerate(analogs):   p.put((i+1)*1.7135000 )
-    
+
     epics.caput('Py:ao1.EGU', 'microns')
     epics.caput('Py:ao1.PREC', 4)
     epics.caput('Py:ai1.PREC', 2)
     epics.caput('Py:ao2.PREC', 3)
 
 
-        
+
     char_waves[0].put([60+random.randrange(30) for i in range(128)])
     char_waves[1].put([random.randrange(256) for i in range(256)])
     char_waves[2].put([random.randrange(256) for i in range(2048)])
     char_waves[3].put([random.randrange(256) for i in range(65536)])
-    
+
 
     long_waves[0].put([i+random.randrange(2) for i in range(128)])
     long_waves[1].put([i+random.randrange(128) for i in range(2048)])
     long_waves[2].put([i  for i in range(65536)])
-    
+
     double_waves[0].put([i+random.randrange(2) for i in range(128)])
     double_waves[1].put([random.random() for i in range(2048)])
     double_waves[2].put([random.random() for i in range(65536)])
 
     pause_pv.put(0)
-    str_waves[0].put([" String %i" % (i+1) for i in range(128)])
-    print 'Data initialized'
+    str_waves[0].put([(" String %i" % (i+1)).encode('ascii') for i in range(128)])
+    print('Data initialized')
 
 text = '''line 1
 this is line 2
@@ -111,13 +111,13 @@ while True:
         initialize_data()
         time.sleep(SLEEP_TIME)
         NEEDS_INIT = False
-        
-    time.sleep(SLEEP_TIME) 
-        
+
+    time.sleep(SLEEP_TIME)
+
     count = count + 1
-    if count  == 3: print 'running'
+    if count  == 3: print('running')
     if count > 99999999: count = 1
-        
+
     t0 = time.time()
     if pause_pv.get() == 1:
         # pause for up to 15 seconds if pause was selected
@@ -139,8 +139,8 @@ while True:
                                        + numpy.sqrt((count/16.0) % 87.)))))
 
         long_waves[1].put([i+random.randrange(128) for i in range(2048)])
-        str_waves[0].put(["Str%i_%.3f" % (i+1, 100*random.random()) for i in range(128)])
-    
+        str_waves[0].put([("Str%i_%.3f" % (i+1, 100*random.random())).encode('ascii') for i in range(128)])
+
     if t0-long_update >= 1.0:
         long_update=t0
         lcount = (lcount + 1) % 10
