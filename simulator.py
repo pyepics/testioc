@@ -57,7 +57,7 @@ def initialize_data():
 
     for i, p in enumerate(longs):    p.put((i+1))
 
-    for i, p in enumerate(strs):     p.put(("String %s" % (i+1)).encode('ascii'))
+    for i, p in enumerate(strs): p.put(("String %s" % (i+1)))
 
     for i, p in enumerate(binaries):   p.put((i+1))
 
@@ -85,7 +85,7 @@ def initialize_data():
     double_waves[2].put([random.random() for i in range(65536)])
 
     pause_pv.put(0)
-    str_waves[0].put([(" String %i" % (i+1)).encode('ascii') for i in range(128)])
+    str_waves[0].put([(" String %i" % (i+1)) for i in range(128)])
     print('Data initialized')
 
 text = '''line 1
@@ -139,7 +139,7 @@ while True:
                                        + numpy.sqrt((count/16.0) % 87.)))))
 
         long_waves[1].put([i+random.randrange(128) for i in range(2048)])
-        str_waves[0].put([("Str%i_%.3f" % (i+1, 100*random.random())).encode('ascii') for i in range(128)])
+        str_waves[0].put([("Str%i_%.3f" % (i+1, 100*random.random())) for i in range(128)])
 
     if t0-long_update >= 1.0:
         long_update=t0
